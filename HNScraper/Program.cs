@@ -13,6 +13,9 @@ namespace HNScraper
     {
         public static void Main(string[] args)
         {
+            StoryProcessor storyProcessor = new StoryProcessor();
+            storyProcessor.LoadTopStoryList();
+
             CreateHostBuilder(args).Build().Run();
         }
 
