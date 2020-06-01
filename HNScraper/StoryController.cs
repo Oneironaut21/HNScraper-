@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace HNScraper
 {
-    public class StoryProcessor
+    [ApiController]
+    [Route("[controller]")]
+    public class StoryController : ControllerBase
     {
         static HttpClient Client { get; set; }
 
-        int storyCount;
         List<int> TopStoryIDList = new List<int>();
-        List<StoryModel> TopStories = new List<StoryModel>();  
+        public static List<StoryModel> TopStories = new List<StoryModel>();  
 
-        public StoryProcessor()
+        public StoryController()
         {
             if (Client == null) { 
                 Client = new HttpClient();
@@ -62,12 +64,21 @@ namespace HNScraper
                 using (HttpResponseMessage response = await Client.GetAsync(url))
                 {
                     StoryModel storyData = await response.Content.ReadAsAsync<StoryModel>();
+
+                    if (storyData.Url is null)
+                        storyData.Url = "";
+
                     TopStories.Add(storyData);
                 }
                 
             }
         }
 
+        [HttpGet]
+        public IEnumerable<StoryModel> Get()
+        {
+            return TopStories.ToArray();
+        }
 
     }
 }

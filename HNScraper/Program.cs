@@ -13,7 +13,7 @@ namespace HNScraper
     {
         public static void Main(string[] args)
         {
-            StoryProcessor storyProcessor = new StoryProcessor();
+            StoryController storyProcessor = new StoryController();
             storyProcessor.LoadTopStoryList();
 
             CreateHostBuilder(args).Build().Run();
