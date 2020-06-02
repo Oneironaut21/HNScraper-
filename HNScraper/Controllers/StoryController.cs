@@ -15,7 +15,7 @@ namespace HNScraper
         static HttpClient Client { get; set; }
 
         List<int> TopStoryIDList = new List<int>();
-        public static List<StoryModel> TopStories = new List<StoryModel>();  
+        public List<StoryModel> TopStories = new List<StoryModel>();  
 
         public StoryController()
         {
@@ -29,14 +29,8 @@ namespace HNScraper
 
         public async Task LoadTopStoryList(int storiesToLoad = 20)
         {
-
-
             await LoadTopStoryIDs();
-
             await LoadTopStoryInfo();
-
-
-
         }
 
         private async Task LoadTopStoryIDs()
@@ -52,10 +46,12 @@ namespace HNScraper
         private async Task LoadTopStoryInfo()
         {
             string url = "";
-            int storiesToLoad = 20;
+            int storiesToLoad = 25;
 
             if (TopStoryIDList.Count < storiesToLoad)
                 storiesToLoad = TopStoryIDList.Count;
+
+            TopStories = new List<StoryModel>();
 
             for (int i = 0; i < storiesToLoad ;  i++  )
             {
@@ -63,21 +59,30 @@ namespace HNScraper
 
                 using (HttpResponseMessage response = await Client.GetAsync(url))
                 {
+
                     StoryModel storyData = await response.Content.ReadAsAsync<StoryModel>();
+                    if (storyData is object)
+                        {
+                        if (storyData.Url is null)
+                            storyData.Url = "";
 
-                    if (storyData.Url is null)
-                        storyData.Url = "";
+                        TopStories.Add(storyData);
+                        }
 
-                    TopStories.Add(storyData);
                 }
                 
             }
         }
 
         [HttpGet]
-        public IEnumerable<StoryModel> Get()
+        public async IAsyncEnumerable<StoryModel> Get()
         {
-            return TopStories.ToArray();
+            await LoadTopStoryList();
+
+            foreach (StoryModel story in TopStories)
+            {
+                yield return story;
+            }
         }
 
     }
