@@ -6,6 +6,17 @@ using System.Net.Http;
 using System.Security.Policy;
 using System.Threading.Tasks;
 
+/*===============================================================================
+The HackerNews New Stories API returns a list of IDs representing the newest stories.
+To get details on these stories such as Title, Author, and URL the API must be called again
+for that item ID.  
+
+For future work if we want to load comments, the children of the story will represent top-level
+comments.  Child IDs of those comments will need to be called recursively until arriving at an item
+with no children 
+  https://github.com/HackerNews/API  
+===============================================================================*/
+
 namespace HNScraper
 {
     [ApiController]
