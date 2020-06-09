@@ -16,7 +16,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task Test()
+        public async Task StoryControllerReturnsStories()
         {
             var controller = new StoryController();
             var response   =  controller.Get();

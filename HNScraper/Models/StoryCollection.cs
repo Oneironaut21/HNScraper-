@@ -18,6 +18,12 @@ namespace HNScraper.Models
         {
             Stories.Add(newStory);
         }
+        public bool Exists(int storyID)
+        {
+            StoryModel foundStory = Stories.Find(story => story.id == storyID);
+
+            return (foundStory is StoryModel);
+        }
 
     }
 }
